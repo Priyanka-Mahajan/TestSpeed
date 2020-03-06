@@ -1,0 +1,5 @@
+﻿<sculptor>
+  <application name="Pipe" rootfolder="Geometry">
+    <geometry name="Pipe" ghx="Pipe.ghx" />
+  </application>
+</sculptor>
