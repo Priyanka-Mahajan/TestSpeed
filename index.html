@@ -3,13 +3,293 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity WebGL Player | Sculptor</title>
-    <script src="Build/UnityLoader.js"></script>
+    <link rel='shortcut icon' type='image/x-icon' href='Images/favicon.ico' />
+    <!--Oswald Font-->
+    <link href="https://fonts.googleapis.com/css?family=Oswald&display=swap" rel="stylesheet"> 
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  	<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+     
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" type="text/css" href="index.css">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <!-- Check Internet Connection-->
     <script>
-      UnityLoader.instantiate("unityContainer", "Build/GeometryTest.json");
+      if (!window.navigator.onLine) {
+        window.location = "noInternetConnection.html";
+      }
     </script>
+
+    <!-- Browser Compatibity Check -->
+    <script type="text/javascript">
+      if( navigator.userAgent.match(/Android/i)
+        || navigator.userAgent.match(/webOS/i)
+        || navigator.userAgent.match(/iPhone/i)
+        || navigator.userAgent.match(/iPad/i)
+        || navigator.userAgent.match(/iPod/i)
+        || navigator.userAgent.match(/BlackBerry/i)
+        || navigator.userAgent.match(/Windows Phone/i))
+      {
+        window.location = "mobileSupport.html";
+      }
+      else if(navigator.userAgent.match('Trident')){
+        window.location = "IENotSupported.html";
+      }
+      else if(navigator.userAgent.match('OPR')){
+        window.location = "operaNotSupported.html";
+      }
+    </script>
+
+    <!-- Javascript -->
+    <script type="text/javascript" src="Javascript/inputResize.js"></script>
+    <script type="text/javascript" src="Javascript/pipe.js"></script>
+    <script type="text/javascript" src="Javascript/validate.js"></script>
+
+    <!-- Unity Loader Script-->
+    <script src="UnityBuild/UnityLoader.js"></script>
+    <script type="text/javascript" src="Javascript/unityProgress.js"></script>
+    <script type="text/javascript" src="Javascript/updateSpinner.js"></script>
+
+    <title>Odico</title>
   </head>
-  <body>
-    <div id="unityContainer" style="width: 1300px; height: 900px; margin: auto"></div>
+
+  <body onload="resizeInput()">
+    <div id="odc-body">
+      <!-- Header -->
+      <header id="odc-header">
+        <!-- Primary navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light shadow-sm bg-white" id="odc-header_primary">
+          <!-- Brand Logo -->
+          <a class="navbar-brand" href="index.html"><img src="Images/odicoLogo.png"></a>
+          <!-- Toggle/Collapsibe Button -->
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#odc-header_primary-nav">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <!-- Collapsible primary navbar -->
+          <div class="navbar-nav collapse navbar-collapse justify-content-end" id="odc-header_primary-nav">
+            <!-- Menu -->
+              <ul class="navbar-nav">
+                <li class="nav-item mr-5">
+                  <a class="nav-link" href="#">ABOUT</a>
+                </li>
+                <li class="nav-item mr-5 active">
+                  <a class="nav-link" href="#">CREATE<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item mr-5">
+                  <a class="nav-link" href="#">RESOURCES</a>
+                </li>
+                <li class="nav-item mr-5">
+                  <a class="nav-link" href="#">CONTACT</a>
+                </li>
+              </ul>
+
+            <!-- Search -->
+            <form class="form-inline mr-3">
+              <div class="input-group input-group-sm">
+                <input disabled type="search" class="form-control" placeholder="Search">
+                <span class="input-group-append">
+                  <button disabled class="btn bg-light border-secondary" type="button">
+                    <i class="fa fa-search"></i>
+                  </button>
+                </span>
+              </div>
+            </form>
+
+            <!-- My Account dropdown -->
+            <div class="dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="odc-header_account-dropdown" role="button"
+                data-toggle="dropdown">My Account </a>
+            </div>
+          </div><!-- End of collapsible primary navbar -->
+        </nav> <!-- End of primary navbar -->
+      </header>
+
+      <!-- Main content section -->
+      <section id="workspace" class="row no-gutters">	
+        <!-- Unity Viewport-->
+        <div id="unityViewport" class="col-lg-9">
+          
+          <h5 id="processing">Processing</h5>
+          <div id="updateSpinner"></div>
+
+          <div class="mt-1" id="unityContainer"></div>
+        
+          <div id="loadingBox">
+            <div id="spinner"></div>
+            <div id="bgBar"></div>
+            <div id="progressBar"></div>
+          </div>
+          <div id="icon"></div>
+          <p id="loadingInfo"></p>
+        </div>
+
+        <!-- Parameter Menu -->
+        <div class="col-lg-3 card pr-2 mt-1 scrollMenu">
+          <div id="paramContainer">
+            <div id="paramHeader" class="text-left pt-5 pb-2 ml-4">CONFIGURE YOUR DESIGN</div>
+            <div class="card-body p-1">
+              <form id="parameterForm" name="parameter-form" action="">
+                <!-- Parameter accordion -->
+                <div id="pipeParam" class="accordion">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <a class="accordion-toggle collapsed" data-toggle="collapse" href="#pipeBasics"><img class="rotate" src="Images/button_side.png" width="32px" height="32px"/>&nbsp;&nbsp;&nbsp;Basics</a>
+                            </h5>
+                        </div>
+      
+                        <div id="pipeBasics" class="collapse">
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label>No. of Pipes</label>
+                                    <div class="inputDiv">
+                                        <input id="PipeCount" name="GENERAL|PIPECOUNT" value="3" min="2" max="4" step="1" data-toggle="tooltip" data-placement="auto" onblur="InputFocusLost(this)" onchange="validateInputField(this)" onkeydown="validateKeyStroke(this)" required> 
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Outer Well Diameter (mm)</label>
+                                    <div class="inputDiv">
+                                        <input id="OuterWellDia" name="GENERAL|OUTERWELLDIAMETER" value="1450" min="1250" max="2500" step="0.01" data-toggle="tooltip" data-placement="auto" onblur="InputFocusLost(this)" onchange="validateInputField(this)" onkeydown="validateKeyStroke(this)" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Inner Well Diameter (mm)</label>
+                                    <div class="inputDiv">
+                                        <input id="InnerWellDia" name="GENERAL|INNERWELLDIAMETER" value="1250" min="1150" max="2400" step="0.01" data-toggle="tooltip" data-placement="auto" onblur="InputFocusLost(this)" onchange="validateInputField(this)" onkeydown="validateKeyStroke(this)" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Mould Height (mm)</label>
+                                    <div class="inputDiv">
+                                        <input id="MouldHeight" name="GENERAL|MOULDHEIGHT" value="900" min="850" max="1000" step="0.01" data-toggle="tooltip" data-placement="auto" onblur="InputFocusLost(this)" onchange="validateInputField(this)" onkeydown="validateKeyStroke(this)" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+      
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <a class="accordion-toggle collapsed" data-toggle="collapse" href="#pipeDiameters"><img class="rotate" src="Images/button_side.png" width="32px" height="32px"/></i>&nbsp;&nbsp;&nbsp;Pipe Diameters</a>
+                            </h5>
+                        </div>
+
+                        <div id="pipeDiameters" class="collapse">
+                            <div class="card-body" id="PipeDiaSection">
+                                <div class="mb-3" id="inputGrpDia1">
+                                    <label >Pipe 1 (mm)</label>
+                                    <div class="inputDiv">
+                                        <input id="Diameter1" name="DIAMETERS|DIA1" value="500" min="200" max="900" step="0.01" data-toggle="tooltip" data-placement="auto" onblur="InputFocusLost(this)" onchange="validateInputField(this)" onkeydown="validateKeyStroke(this)" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3" id="inputGrpDia2">
+                                    <label>Pipe 2 (mm)</label>
+                                    <div class="inputDiv">
+                                        <input id="Diameter2" name="DIAMETERS|DIA2" value="500" min="200" max="900" step="0.01" data-toggle="tooltip" data-placement="auto" onblur="InputFocusLost(this)" onchange="validateInputField(this)" onkeydown="validateKeyStroke(this)" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3" id="inputGrpDia3">
+                                    <label>Pipe 3 (mm)</label>
+                                    <div class="inputDiv">
+                                        <input id="Diameter3" name="DIAMETERS|DIA3" value="700" min="200" max="900" step="0.01" data-toggle="tooltip" data-placement="auto" onblur="InputFocusLost(this)" onchange="validateInputField(this)" onkeydown="validateKeyStroke(this)" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+      
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <a class="accordion-toggle collapsed" data-toggle="collapse" href="#pipeAngles"><img class="rotate" src="Images/button_side.png" width="32px" height="32px"/></i>&nbsp;&nbsp;&nbsp;Inlet Angles</a>
+                            </h5>
+                        </div>
+      
+                        <div id="pipeAngles" class="collapse">
+                            <div class="card-body" id="PipeAngleSection">
+                                <div class="mb-3" id="inputGrpAngle1">
+                                    <label>Between Pipe 1-2 (deg)</label>
+                                    <div class="inputDiv">
+                                        <input id="Angle1" name="ANGLES|ANGLE1" value="120" min="30" max="330" step="0.01" data-toggle="tooltip" data-placement="auto" onblur="InputFocusLost(this)" onchange="validateInputField(this)" onkeydown="validateKeyStroke(this)" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3" id="inputGrpAngle2">
+                                    <label>Between Pipe 2-3 (deg)</label>
+                                    <div class="inputDiv">
+                                        <input id="Angle2" name="ANGLES|ANGLE2" value="120" min="30" max="330" step="0.01" data-toggle="tooltip" data-placement="auto" onblur="InputFocusLost(this)" onchange="validateInputField(this)" onkeydown="validateKeyStroke(this)" required>
+                                    </div>
+                                </div>
+                            </div>  
+                        </div>
+
+                    </div>  
+                </div>	  
+              </form>
+
+              <div class=" mt-4 text-left ml-3">
+                <a id="OrderButton" class="btn btn-large" href="order.html">Order Now</a>
+              </div>
+            </div>
+          </div>   
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer id="footer">
+        <!-- Footer navbar -->
+      <nav class="navbar fixed-bottom navbar-expand-md navbar-dark bg-dark" id="odc-footer">
+
+          <!-- Toggle/Collapsibe Button -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#odc-footer_nav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+          <!-- Collapsible secondary navbar -->
+        <div class="collapse navbar-collapse justify-content-center small" id="odc-footer_nav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="#">Copyright</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Privacy Policy</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Terms of Service</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">FAQ</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Sitemap</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Contact Us</a>
+            </li>
+            <li>
+              <a class="nav-link" href="#"><i class="fa fa-facebook"></i></a>
+            </li>
+            <li>
+              <a class="nav-link" href="#"><i class="fa fa-twitter"></i></a>
+            </li>
+            <li>
+              <a class="nav-link" href="#"><i class="fa fa-instagram"></i></a>
+            </li>
+          </ul>
+        </div><!-- End of collapsible secondary navbar -->
+      </nav><!-- End of secondary navbar -->
+    </footer>
+    </div>
+
+    <script>
+      $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip(); 
+      });
+    </script>
   </body>
 </html>
