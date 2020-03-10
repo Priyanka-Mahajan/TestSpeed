@@ -10,29 +10,10 @@ function UnityProgress(unityInstance, progress) {
 	  return;
 	} else if (progress === "complete") {
 
-		document.getElementById("spinner").style.display = "none";
-		document.getElementById("bgBar").style.display = "block";
-		document.getElementById("progressBar").style.display = "inherit";
-
-		timer = setInterval(() => {
-			let date = new Date();
-			updateLoader(date.getMilliseconds() / 1000);
-		}, 700);
 
 	} else if (progress === 1 || progress === "preinit") {
-		document.getElementById("progressBar").style.width = 200 * 0.4 + "px"
-		document.getElementById("loadingInfo").innerHTML = Math.round(0.4 * 100) + "%";
-		document.getElementById("spinner").style.display = "none";
-		document.getElementById("bgBar").style.display = "block";
-		document.getElementById("progressBar").style.display = "inherit";
 
 	} else if (progress > 0) {
-
-		document.getElementById("progressBar").style.width = 200 * (progress/3) + "px"
-		document.getElementById("loadingInfo").innerHTML = Math.round((progress/3) * 100) + "%";
-		document.getElementById("spinner").style.display = "none";
-		document.getElementById("bgBar").style.display = "block";
-		document.getElementById("progressBar").style.display = "inherit";
 	}
 
 	}
